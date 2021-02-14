@@ -4,6 +4,7 @@ const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
+const errorButton = document.getElementById('errorBtn');
 // selected image 
 let sliders = [];
 
@@ -23,24 +24,24 @@ const showImages = (images) => {
   galleryHeader.style.display = 'flex';
   toggleSpinner()
   images.forEach(image => {
-    let div = document.createElement('div');
-    div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
-    gallery.appendChild(div)
-    toggleSpinner(false)
-
-  })
+  let div = document.createElement('div');
+  div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
+  div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+  gallery.appendChild(div)
+    
+})
   
 }
 const getImages = (query) => {
-  toggleSpinner()
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
+    toggleSpinner()
+    fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
-    toggleSpinner(true)
+    .catch((e) => {
+     errorButton.style.display = "block";
+  })
     
-}
+  }
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
@@ -156,4 +157,4 @@ const toggleSpinner = () => {
   const spinner = document.getElementById('loadingSpinner');
   spinner.classList.toggle('d-none')
 }
-  
+
